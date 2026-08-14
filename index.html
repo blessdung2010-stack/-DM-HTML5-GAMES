@@ -1,0 +1,2219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DM HTML5 Games</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+ --bg:#070a16;
+ --panel:#10162b;
+ --panel2:#151d38;
+ --text:#fff;
+ --muted:#9ba8d0;
+ --cyan:#00e5ff;
+ --purple:#7c4dff;
+ --pink:#ff4081;
+ --green:#00e676;
+ --danger:#ff1744;
+}
+
+body{
+ font-family:Arial,Helvetica,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+ min-height:100vh;
+ overflow-x:hidden;
+}
+
+body:before{
+ content:"";
+ position:fixed;
+ inset:0;
+ pointer-events:none;
+ z-index:-1;
+ background:
+ radial-gradient(circle at 10% 10%,#243b9b55,transparent 30%),
+ radial-gradient(circle at 90% 90%,#7b1fa255,transparent 30%);
+}
+
+button,input,select{font:inherit}
+
+button{
+ cursor:pointer;
+ border:0;
+ color:white;
+}
+
+button:hover{
+ transform:translateY(-2px);
+ filter:brightness(1.12);
+}
+
+header{
+ position:sticky;
+ top:0;
+ z-index:100;
+ padding:16px 4%;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:15px;
+ background:#080b18ee;
+ backdrop-filter:blur(18px);
+ border-bottom:1px solid #ffffff18;
+}
+
+.brand{
+ font-size:25px;
+ font-weight:900;
+}
+
+.brand span{color:var(--cyan)}
+
+.header-right{
+ display:flex;
+ gap:8px;
+ align-items:center;
+}
+
+.header-right input{
+ width:150px;
+ padding:10px;
+ border-radius:9px;
+ border:1px solid #ffffff25;
+ background:#ffffff0c;
+ color:white;
+ outline:none;
+}
+
+.btn{
+ padding:10px 15px;
+ border-radius:9px;
+ background:linear-gradient(135deg,var(--purple),#a435ff);
+ font-weight:bold;
+}
+
+.menu-btn{
+ font-size:22px;
+ width:45px;
+ height:42px;
+ border-radius:10px;
+ background:#ffffff12;
+}
+
+.hero{
+ text-align:center;
+ padding:55px 20px 30px;
+}
+
+.hero h1{
+ font-size:clamp(35px,7vw,70px);
+}
+
+.hero h1 span{color:var(--cyan)}
+
+.hero p{
+ max-width:700px;
+ margin:15px auto;
+ color:var(--muted);
+ line-height:1.7;
+}
+
+.container{
+ width:min(1400px,94%);
+ margin:auto;
+}
+
+.toolbar{
+ display:flex;
+ flex-wrap:wrap;
+ gap:10px;
+ margin:20px 0;
+}
+
+.toolbar button{
+ background:#ffffff10;
+ padding:10px 15px;
+ border-radius:10px;
+}
+
+.games{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+ gap:18px;
+}
+
+.card{
+ background:linear-gradient(145deg,#ffffff10,#ffffff04);
+ border:1px solid #ffffff15;
+ border-radius:18px;
+ padding:20px;
+ min-height:250px;
+ transition:.25s;
+ position:relative;
+ overflow:hidden;
+}
+
+.card:hover{
+ transform:translateY(-6px);
+ box-shadow:0 20px 50px #0008;
+}
+
+.icon{
+ font-size:45px;
+ margin-bottom:12px;
+}
+
+.card h3{margin-bottom:8px}
+
+.card p{
+ color:var(--muted);
+ font-size:13px;
+ line-height:1.5;
+ min-height:50px;
+}
+
+.tags{
+ display:flex;
+ gap:5px;
+ flex-wrap:wrap;
+ margin-top:10px;
+}
+
+.tag{
+ font-size:10px;
+ background:#ffffff12;
+ padding:5px 7px;
+ border-radius:20px;
+ color:#b9c4ed;
+}
+
+.play{
+ width:100%;
+ margin-top:15px;
+ padding:12px;
+ border-radius:10px;
+ background:linear-gradient(135deg,var(--cyan),#246bff);
+ font-weight:bold;
+}
+
+footer{
+ text-align:center;
+ color:#68749c;
+ padding:50px 20px;
+ margin-top:50px;
+ border-top:1px solid #ffffff12;
+}
+
+/* welcome */
+#welcome{
+ position:fixed;
+ inset:0;
+ z-index:9999;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:linear-gradient(135deg,#030615,#111a4a,#35115e);
+ transition:1s;
+}
+
+.welcome-box{text-align:center;padding:30px}
+
+.logo{
+ font-size:100px;
+ font-weight:900;
+ background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));
+ -webkit-background-clip:text;
+ color:transparent;
+ animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+ from{filter:drop-shadow(0 0 5px var(--cyan))}
+ to{filter:drop-shadow(0 0 30px var(--pink))}
+}
+
+.loader{
+ width:230px;
+ height:6px;
+ background:#ffffff18;
+ border-radius:20px;
+ margin:25px auto;
+ overflow:hidden;
+}
+
+.loader span{
+ display:block;
+ height:100%;
+ width:0;
+ background:linear-gradient(90deg,var(--cyan),var(--pink));
+ animation:load 3s forwards;
+}
+
+@keyframes load{to{width:100%}}
+
+/* side menu */
+#sideMenu{
+ position:fixed;
+ top:0;
+ right:-390px;
+ width:min(390px,94%);
+ height:100%;
+ background:#0b1023f7;
+ backdrop-filter:blur(20px);
+ z-index:8000;
+ padding:25px;
+ overflow:auto;
+ transition:.4s;
+ border-left:1px solid #ffffff20;
+}
+
+#sideMenu.open{right:0}
+
+.menu-title{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:20px;
+}
+
+.closeMenu{
+ background:#ff1744;
+ padding:8px 12px;
+ border-radius:8px;
+}
+
+.option{
+ background:#ffffff08;
+ border:1px solid #ffffff12;
+ padding:15px;
+ border-radius:12px;
+ margin:10px 0;
+}
+
+.option h3{margin-bottom:10px}
+
+.option label{
+ display:block;
+ color:var(--muted);
+ margin:8px 0 5px;
+ font-size:13px;
+}
+
+.option select,
+.option input{
+ width:100%;
+ padding:10px;
+ border-radius:8px;
+ border:1px solid #ffffff20;
+ background:#111831;
+ color:white;
+}
+
+.option button{
+ padding:10px 14px;
+ border-radius:8px;
+ background:linear-gradient(135deg,var(--purple),#b62cff);
+ margin-top:7px;
+}
+
+/* panels */
+.panel{
+ display:none;
+ position:fixed;
+ inset:0;
+ z-index:7000;
+ background:#02040cf5;
+ overflow:auto;
+ padding:25px;
+}
+
+.panel-box{
+ width:min(850px,100%);
+ margin:20px auto;
+ background:#0c1228;
+ border:1px solid #ffffff18;
+ border-radius:18px;
+ padding:25px;
+}
+
+.panel-box h2{
+ color:var(--cyan);
+ margin-bottom:15px;
+}
+
+.panel-box p{
+ color:#aeb8d8;
+ line-height:1.7;
+ margin:10px 0;
+}
+
+.panel-close{
+ float:right;
+ background:#ff1744;
+ padding:8px 12px;
+ border-radius:8px;
+}
+
+/* credits */
+.credits{
+ height:420px;
+ overflow:hidden;
+ position:relative;
+ background:#000;
+ border-radius:12px;
+ margin-top:20px;
+}
+
+.credits-roll{
+ text-align:center;
+ position:absolute;
+ width:100%;
+ animation:credits 22s linear infinite;
+}
+
+.credits-roll h1{
+ margin-bottom:45px;
+ color:white;
+}
+
+.credits-roll h2{
+ margin-top:35px;
+ color:var(--cyan);
+}
+
+.credits-roll p{
+ color:#ddd;
+ margin:12px;
+}
+
+@keyframes credits{
+ from{transform:translateY(430px)}
+ to{transform:translateY(-700px)}
+}
+
+/* countdown */
+#countdown{
+ display:none;
+ position:fixed;
+ inset:0;
+ z-index:6000;
+ align-items:center;
+ justify-content:center;
+ background:#000d;
+}
+
+#countNumber{
+ font-size:clamp(100px,25vw,250px);
+ color:var(--cyan);
+ text-shadow:0 0 50px var(--cyan);
+ animation:pop .8s;
+}
+
+@keyframes pop{
+ 0%{transform:scale(2);opacity:0}
+ 100%{transform:scale(1);opacity:1}
+}
+
+/* game */
+#gameModal{
+ display:none;
+ position:fixed;
+ inset:0;
+ z-index:5000;
+ background:#02040cf7;
+ overflow:auto;
+ padding:15px;
+}
+
+.game-window{
+ width:min(950px,100%);
+ margin:15px auto;
+ background:#0c1228;
+ border:1px solid #ffffff20;
+ border-radius:20px;
+ padding:18px;
+}
+
+.game-top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ margin-bottom:10px;
+}
+
+.close-game{
+ background:#ff1744;
+ padding:9px 13px;
+ border-radius:8px;
+}
+
+.game-info{
+ display:flex;
+ justify-content:center;
+ flex-wrap:wrap;
+ gap:15px;
+ margin:10px 0;
+}
+
+.info{
+ background:#ffffff0c;
+ border-radius:8px;
+ padding:8px 12px;
+ color:#d9def4;
+}
+
+canvas{
+ width:100%;
+ max-width:850px;
+ height:auto;
+ min-height:350px;
+ background:#02040c;
+ display:block;
+ margin:auto;
+ border-radius:12px;
+ border:1px solid #ffffff18;
+}
+
+.instructions{
+ text-align:center;
+ color:#9fa9ce;
+ padding:13px;
+ line-height:1.5;
+}
+
+.game-buttons{
+ display:flex;
+ justify-content:center;
+ gap:10px;
+ flex-wrap:wrap;
+}
+
+.game-buttons button{
+ padding:10px 15px;
+ border-radius:9px;
+ background:#ffffff12;
+}
+
+.health-bar{
+ width:180px;
+ height:17px;
+ border:1px solid #ffffff25;
+ border-radius:20px;
+ overflow:hidden;
+ display:inline-block;
+ vertical-align:middle;
+}
+
+#healthFill{
+ width:100%;
+ height:100%;
+ background:linear-gradient(90deg,#00e676,#ffea00,#ff1744);
+ transition:.2s;
+}
+
+@media(max-width:650px){
+ header{
+  flex-direction:column;
+ }
+ .header-right{
+  width:100%;
+ }
+ .header-right input{
+  flex:1;
+ }
+ canvas{
+  min-height:280px;
+ }
+}
+</style>
+</head>
+
+<body>
+
+<!-- WELCOME -->
+<div id="welcome">
+ <div class="welcome-box">
+  <div class="logo">DM</div>
+  <h1>DM HTML5 Games</h1>
+  <p style="color:#b9c4ed;margin-top:10px">
+   Your browser. Your games. Your adventure.
+  </p>
+  <div class="loader"><span></span></div>
+  <small style="color:#7f8bad">
+   Powered by inter trick
+  </small>
+ </div>
+</div>
+
+<!-- SIDE MENU -->
+<aside id="sideMenu">
+
+ <div class="menu-title">
+  <h2>?? Options</h2>
+  <button class="closeMenu" onclick="toggleMenu()">?</button>
+ </div>
+
+ <div class="option">
+  <h3>?? Player</h3>
+  <label>Username</label>
+  <input id="menuUsername" placeholder="Player 1.1">
+  <button onclick="saveUsername()">Save Username</button>
+ </div>
+
+ <div class="option">
+  <h3>?? Game Mode</h3>
+  <label>Mode</label>
+  <select id="mode">
+   <option value="single">Single Player</option>
+   <option value="two">2 Players — 1 Keyboard</option>
+  </select>
+ </div>
+
+ <div class="option">
+  <h3>?? Difficulty</h3>
+  <label>Level</label>
+  <select id="difficulty">
+   <option value="simple">Simple</option>
+   <option value="normal" selected>Normal</option>
+   <option value="hard">Hard</option>
+   <option value="hell">Hell</option>
+  </select>
+ </div>
+
+ <div class="option">
+  <h3>?? Sound</h3>
+  <label>Sound</label>
+  <select id="sound">
+   <option value="on">Sound ON</option>
+   <option value="off">Sound OFF</option>
+  </select>
+
+  <label>Volume</label>
+  <input id="volume" type="range" min="0" max="100" value="60">
+ </div>
+
+ <div class="option">
+  <h3>?? Save / Download</h3>
+  <button onclick="downloadThisPage()">?? Download DM HTML</button>
+  <button onclick="saveGame()">?? Save Game</button>
+ </div>
+
+ <div class="option">
+  <h3>?? DM Offline App</h3>
+  <p style="font-size:13px;color:#9ba8d0">
+   Download the HTML file and keep it on your device.
+   You can open it offline and play the built-in games.
+  </p>
+  <button onclick="downloadThisPage()">?? Download DM App File</button>
+ </div>
+
+ <div class="option">
+  <h3>?? Information</h3>
+  <button onclick="showPanel('aboutPanel')">About Web Page</button>
+  <button onclick="showPanel('creatorPanel')">About Creator</button>
+  <button onclick="showPanel('ratingPanel')">? Rate Web Page</button>
+ </div>
+
+ <div class="option">
+  <h3>?? Compatibility</h3>
+  <p style="font-size:13px;color:#9ba8d0">
+   This game works on PC, Android, Mac, Linux and other
+   modern devices with a browser. Keyboard games work best
+   on a physical keyboard.
+  </p>
+ </div>
+
+</aside>
+
+<!-- ABOUT -->
+<div class="panel" id="aboutPanel">
+ <div class="panel-box">
+  <button class="panel-close" onclick="closePanel('aboutPanel')">?</button>
+  <h2>About DM HTML5 Games</h2>
+  <p>
+   DM HTML5 Games is an offline-friendly browser game page
+   designed to keep many small games in one place.
+  </p>
+  <p>
+   The games use HTML5 Canvas, CSS and JavaScript.
+   No internet connection is required for the built-in games
+   after this HTML file has been saved.
+  </p>
+  <p>
+   ?? Single player and selected 2-player keyboard modes<br>
+   ?? Health system<br>
+   ?? Health gifts<br>
+   ?? Difficulty levels<br>
+   ?? Sound controls<br>
+   ?? Offline saving/download
+  </p>
+ </div>
+</div>
+
+<!-- CREATOR -->
+<div class="panel" id="creatorPanel">
+ <div class="panel-box">
+  <button class="panel-close" onclick="closePanel('creatorPanel')">?</button>
+  <h2>About Creator</h2>
+
+  <div class="credits">
+   <div class="credits-roll">
+    <h1>DM HTML5 GAMES</h1>
+
+    <h2>ABOUT THE CREATOR</h2>
+    <p>Created by xx.1</p>
+    <p>Creator of the Luna Notepad web page</p>
+    <p>Building simple browser experiences</p>
+    <p>Games • Web • HTML5 • JavaScript</p>
+
+    <h2>SPECIAL THANKS</h2>
+    <p>To everyone who plays and tests the games.</p>
+    <p>To everyone learning web development.</p>
+
+    <h2>TECHNOLOGY</h2>
+    <p>HTML5</p>
+    <p>CSS3</p>
+    <p>JavaScript</p>
+    <p>Canvas</p>
+
+    <h2>POWERED BY</h2>
+    <p>inter trick</p>
+
+    <h2>LUNA NOTEPAD</h2>
+    <p>DM HTML5 Games</p>
+    <p>Created with creativity and code.</p>
+
+    <h1>THE END</h1>
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- RATING -->
+<div class="panel" id="ratingPanel">
+ <div class="panel-box">
+  <button class="panel-close" onclick="closePanel('ratingPanel')">?</button>
+  <h2>? Rate This Web Page</h2>
+  <p>How many stars would you give DM HTML5 Games?</p>
+
+  <div id="stars"
+       style="font-size:40px;text-align:center;margin:25px">
+  </div>
+
+  <p id="ratingText" style="text-align:center"></p>
+ </div>
+</div>
+
+<!-- COUNTDOWN -->
+<div id="countdown">
+ <div id="countNumber">5</div>
+</div>
+
+<!-- GAME -->
+<div id="gameModal">
+ <div class="game-window">
+
+  <div class="game-top">
+   <h2 id="gameTitle">Game</h2>
+   <button class="close-game" onclick="closeGame()">? Close</button>
+  </div>
+
+  <div class="game-info">
+   <div class="info">?? <span id="playerNameDisplay">Player 1.1</span></div>
+   <div class="info">?? Score: <span id="score">0</span></div>
+   <div class="info">
+    ??
+    <span class="health-bar">
+     <span id="healthFill"></span>
+    </span>
+   </div>
+   <div class="info">?? <span id="difficultyDisplay">Normal</span></div>
+  </div>
+
+  <canvas id="gameCanvas" width="850" height="500"></canvas>
+
+  <div class="instructions" id="instructions">
+   Get ready!
+  </div>
+
+  <div class="game-buttons">
+   <button onclick="restartCurrentGame()">?? Restart</button>
+   <button onclick="giveHealth()">?? Health Gift</button>
+  </div>
+
+ </div>
+</div>
+
+<header>
+ <div class="brand">DM <span>HTML5 Games</span></div>
+
+ <div class="header-right">
+  <input id="username" placeholder="Player 1.1">
+  <button class="btn" onclick="saveUsername()">Save</button>
+  <button class="menu-btn" onclick="toggleMenu()">?</button>
+ </div>
+</header>
+
+<section class="hero">
+ <h1>Welcome to <span>DM Games</span></h1>
+ <p>
+  Play browser games offline. Choose your difficulty,
+  use health, invite Player 2 and play using one keyboard.
+ </p>
+</section>
+
+<main class="container">
+
+ <div class="toolbar">
+  <button onclick="filterGames('all')">?? All</button>
+  <button onclick="filterGames('two')">?? 2 Players</button>
+  <button onclick="filterGames('action')">?? Action</button>
+  <button onclick="filterGames('arcade')">??? Arcade</button>
+  <button onclick="toggleMenu()">?? Options</button>
+ </div>
+
+ <div class="games" id="games"></div>
+
+</main>
+
+<footer>
+ © 2026 DM HTML5 Games<br>
+ Created by xx.1 • Powered by inter trick
+</footer>
+
+<script>
+/* ==========================================================
+   DM HTML5 GAME ENGINE
+========================================================== */
+
+const canvas=document.getElementById("gameCanvas");
+const ctx=canvas.getContext("2d");
+
+let currentGame="";
+let score=0;
+let health=100;
+let animationID=null;
+let gameRunning=false;
+let gameStartTime=0;
+let keys={};
+
+const games=[
+ {
+  name:"Space Shooter",
+  icon:"??",
+  type:"shooter",
+  desc:"Destroy enemies and survive the attack.",
+  category:"action",
+  two:true
+ },
+ {
+  name:"Snake",
+  icon:"??",
+  type:"snake",
+  desc:"Eat food and grow longer.",
+  category:"arcade",
+  two:true
+ },
+ {
+  name:"Dodge Attack",
+  icon:"??",
+  type:"dodge",
+  desc:"Avoid falling blocks and survive.",
+  category:"action",
+  two:true
+ },
+ {
+  name:"Star Catch",
+  icon:"?",
+  type:"catch",
+  desc:"Catch stars while your speed increases.",
+  category:"arcade",
+  two:false
+ },
+ {
+  name:"Target Shooter",
+  icon:"??",
+  type:"target",
+  desc:"Hit targets before they disappear.",
+  category:"action",
+  two:true
+ },
+ {
+  name:"Runner",
+  icon:"??",
+  type:"runner",
+  desc:"Jump over obstacles and survive.",
+  category:"arcade",
+  two:true
+ },
+ {
+  name:"Flappy Rocket",
+  icon:"??",
+  type:"flappy",
+  desc:"Fly through the gaps.",
+  category:"arcade",
+  two:false
+ },
+ {
+  name:"Breakout",
+  icon:"??",
+  type:"breakout",
+  desc:"Destroy all the blocks.",
+  category:"arcade",
+  two:false
+ },
+ {
+  name:"Ping Pong",
+  icon:"??",
+  type:"pong",
+  desc:"Classic two-player keyboard Pong.",
+  category:"arcade",
+  two:true
+ },
+ {
+  name:"Coin Hunter",
+  icon:"??",
+  type:"catch",
+  desc:"Collect valuable coins.",
+  category:"arcade",
+  two:true
+ },
+ {
+  name:"Zombie Defense",
+  icon:"??",
+  type:"shooter",
+  desc:"Defend yourself from enemies.",
+  category:"action",
+  two:true
+ },
+ {
+  name:"Laser Battle",
+  icon:"??",
+  type:"shooter",
+  desc:"Shoot incoming targets.",
+  category:"action",
+  two:true
+ }
+];
+
+/* welcome */
+setTimeout(()=>{
+ document.getElementById("welcome").style.opacity="0";
+ document.getElementById("welcome").style.visibility="hidden";
+},3500);
+
+/* menu */
+function toggleMenu(){
+ document.getElementById("sideMenu").classList.toggle("open");
+}
+
+/* username */
+function saveUsername(){
+ const a=document.getElementById("username");
+ const b=document.getElementById("menuUsername");
+
+ const name=(a.value||b.value).trim()||"Player 1.1";
+
+ localStorage.setItem("dm_username",name);
+
+ a.value=name;
+ b.value=name;
+
+ document.getElementById("playerNameDisplay").textContent=name;
+
+ alert("Username saved: "+name);
+}
+
+let savedName=localStorage.getItem("dm_username")||"Player 1.1";
+document.getElementById("username").value=savedName;
+document.getElementById("menuUsername").value=savedName;
+document.getElementById("playerNameDisplay").textContent=savedName;
+
+/* settings */
+const difficulty=document.getElementById("difficulty");
+
+function getSpeed(){
+ const d=difficulty.value;
+
+ if(d==="simple")return .65;
+ if(d==="normal")return 1;
+ if(d==="hard")return 1.35;
+ return 1.8;
+}
+
+difficulty.onchange=()=>{
+ document.getElementById("difficultyDisplay").textContent=
+ difficulty.value.toUpperCase();
+};
+
+/* games */
+function createCards(list=games){
+
+ const area=document.getElementById("games");
+ area.innerHTML="";
+
+ list.forEach((g,i)=>{
+
+  const card=document.createElement("div");
+  card.className="card";
+
+  card.innerHTML=`
+   <div class="icon">${g.icon}</div>
+   <h3>${g.name}</h3>
+   <p>${g.desc}</p>
+
+   <div class="tags">
+    <span class="tag">HTML5</span>
+    <span class="tag">OFFLINE</span>
+    ${g.two?'<span class="tag">2 PLAYERS</span>':''}
+   </div>
+
+   <button class="play" onclick="startGame('${g.type}','${g.name}')">
+    ? Play Game
+   </button>
+  `;
+
+  area.appendChild(card);
+ });
+}
+
+createCards();
+
+function filterGames(type){
+
+ if(type==="all"){
+  createCards();
+  return;
+ }
+
+ if(type==="two"){
+  createCards(games.filter(g=>g.two));
+  return;
+ }
+
+ createCards(games.filter(g=>g.category===type));
+}
+
+/* panels */
+function showPanel(id){
+ document.getElementById(id).style.display="block";
+}
+
+function closePanel(id){
+ document.getElementById(id).style.display="none";
+}
+
+/* stars */
+const stars=document.getElementById("stars");
+
+for(let i=1;i<=6;i++){
+
+ const s=document.createElement("span");
+
+ s.textContent="?";
+ s.style.cursor="pointer";
+ s.dataset.star=i;
+
+ s.onclick=()=>{
+
+  for(let j=0;j<6;j++){
+   stars.children[j].textContent=
+    j<i?"?":"?";
+  }
+
+  document.getElementById("ratingText").textContent=
+   "Thanks for rating DM HTML5 Games "+i+"/6 ?";
+ };
+
+ stars.appendChild(s);
+}
+
+/* sound */
+let audioCtx=null;
+
+function beep(freq=500,duration=.08){
+
+ if(document.getElementById("sound").value==="off")return;
+
+ if(!audioCtx)
+  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+
+ const osc=audioCtx.createOscillator();
+ const gain=audioCtx.createGain();
+
+ osc.frequency.value=freq;
+ gain.gain.value=
+   Number(document.getElementById("volume").value)/1000;
+
+ osc.connect(gain);
+ gain.connect(audioCtx.destination);
+
+ osc.start();
+
+ setTimeout(()=>osc.stop(),duration*1000);
+}
+
+/* health */
+function resetHealth(){
+ health=100;
+ updateHealth();
+}
+
+function updateHealth(){
+
+ document.getElementById("healthFill").style.width=
+  Math.max(0,health)+"%";
+}
+
+function damage(amount){
+
+ health-=amount;
+ updateHealth();
+ beep(120,.12);
+
+ if(health<=0)
+  gameOver();
+}
+
+function giveHealth(){
+
+ if(!gameRunning)return;
+
+ health=Math.min(100,health+25);
+ updateHealth();
+ beep(800,.1);
+
+ score+=5;
+
+ document.getElementById("score").textContent=score;
+}
+
+/* score */
+function setScore(){
+ document.getElementById("score").textContent=score;
+}
+
+/* difficulty speed gradually increases */
+function difficultySpeed(base){
+
+ const elapsed=(performance.now()-gameStartTime)/1000;
+ const increase=Math.min(2,elapsed/30);
+
+ return base*getSpeed()*(1+increase);
+}
+
+/* start */
+function startGame(type,name){
+
+ currentGame=type;
+
+ document.getElementById("gameTitle").textContent=name;
+ document.getElementById("difficultyDisplay").textContent=
+  difficulty.value.toUpperCase();
+
+ document.getElementById("playerNameDisplay").textContent=
+  localStorage.getItem("dm_username")||"Player 1.1";
+
+ document.getElementById("countdown").style.display="flex";
+
+ let n=5;
+
+ document.getElementById("countNumber").textContent=n;
+
+ const timer=setInterval(()=>{
+
+  n--;
+
+  if(n>0){
+   document.getElementById("countNumber").textContent=n;
+   beep(400,.06);
+  }else{
+
+   clearInterval(timer);
+
+   document.getElementById("countdown").style.display="none";
+   document.getElementById("gameModal").style.display="block";
+
+   launchGame(type);
+  }
+
+ },700);
+}
+
+function launchGame(type){
+
+ cancelAnimationFrame(animationID);
+
+ gameRunning=true;
+ gameStartTime=performance.now();
+
+ score=0;
+ resetHealth();
+ setScore();
+
+ document.onkeydown=null;
+ document.onkeyup=null;
+ canvas.onclick=null;
+ canvas.onmousemove=null;
+
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ if(type==="snake")snakeGame();
+ else if(type==="shooter")shooterGame();
+ else if(type==="dodge")dodgeGame();
+ else if(type==="catch")catchGame();
+ else if(type==="target")targetGame();
+ else if(type==="runner")runnerGame();
+ else if(type==="flappy")flappyGame();
+ else if(type==="breakout")breakoutGame();
+ else if(type==="pong")pongGame();
+}
+
+function closeGame(){
+
+ gameRunning=false;
+
+ cancelAnimationFrame(animationID);
+
+ document.getElementById("gameModal").style.display="none";
+
+ document.onkeydown=null;
+ document.onkeyup=null;
+ canvas.onclick=null;
+ canvas.onmousemove=null;
+}
+
+function restartCurrentGame(){
+
+ if(!currentGame)return;
+
+ launchGame(currentGame);
+}
+
+function gameOver(){
+
+ if(!gameRunning)return;
+
+ gameRunning=false;
+
+ cancelAnimationFrame(animationID);
+
+ ctx.fillStyle="#000b";
+ ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ ctx.fillStyle="#fff";
+ ctx.textAlign="center";
+
+ ctx.font="bold 60px Arial";
+ ctx.fillText("GAME OVER",425,220);
+
+ ctx.font="25px Arial";
+ ctx.fillText("Score: "+score,425,270);
+
+ ctx.font="18px Arial";
+ ctx.fillText("Press RESTART below to play again",425,315);
+
+ beep(100,.3);
+}
+
+/* ==========================================================
+ SNAKE
+========================================================== */
+
+function snakeGame(){
+
+ document.getElementById("instructions").textContent=
+ "Player 1: Arrow Keys. Player 2: WASD. Eat food. Health gifts are available.";
+
+ let snake=[
+  {x:300,y:250},
+  {x:280,y:250},
+  {x:260,y:250}
+ ];
+
+ let dx=20;
+ let dy=0;
+
+ let food=randomFood();
+
+ let p2=[
+  {x:550,y:250},
+  {x:570,y:250},
+  {x:590,y:250}
+ ];
+
+ let p2dx=-20;
+ let p2dy=0;
+
+ let two=document.getElementById("mode").value==="two";
+
+ function randomFood(){
+  return {
+   x:Math.floor(Math.random()*40)*20,
+   y:Math.floor(Math.random()*24)*20
+  };
+ }
+
+ document.onkeydown=e=>{
+
+  if(e.key==="ArrowUp"&&dy===0){
+   dx=0;dy=-20;
+  }
+
+  if(e.key==="ArrowDown"&&dy===0){
+   dx=0;dy=20;
+  }
+
+  if(e.key==="ArrowLeft"&&dx===0){
+   dx=-20;dy=0;
+  }
+
+  if(e.key==="ArrowRight"&&dx===0){
+   dx=20;dy=0;
+  }
+
+  if(e.key.toLowerCase()==="w"&&p2dy===0){
+   p2dx=0;p2dy=-20;
+  }
+
+  if(e.key.toLowerCase()==="s"&&p2dy===0){
+   p2dx=0;p2dy=20;
+  }
+
+  if(e.key.toLowerCase()==="a"&&p2dx===0){
+   p2dx=-20;p2dy=0;
+  }
+
+  if(e.key.toLowerCase()==="d"&&p2dx===0){
+   p2dx=20;p2dy=0;
+  }
+ };
+
+ let last=0;
+
+ function loop(time){
+
+  if(!gameRunning)return;
+
+  if(time-last<120/getSpeed()){
+   animationID=requestAnimationFrame(loop);
+   return;
+  }
+
+  last=time;
+
+  ctx.fillStyle="#02040c";
+  ctx.fillRect(0,0,850,500);
+
+  snake[0].x+=dx;
+  snake[0].y+=dy;
+
+  if(
+   snake[0].x<0||
+   snake[0].x>=840||
+   snake[0].y<0||
+   snake[0].y>=500
+  ){
+   damage(100);
+   return;
+  }
+
+  for(let i=snake.length-1;i>0;i--){
+   snake[i].x=snake[i-1].x;
+   snake[i].y=snake[i-1].y;
+  }
+
+  if(
+   snake[0].x===food.x&&
+   snake[0].y===food.y
+  ){
+   snake.push({...snake[snake.length-1]});
+   score+=10;
+   food=randomFood();
+   beep(700,.06);
+   setScore();
+  }
+
+  if(two){
+
+   p2[0].x+=p2dx;
+   p2[0].y+=p2dy;
+
+   for(let i=p2.length-1;i>0;i--){
+    p2[i].x=p2[i-1].x;
+    p2[i].y=p2[i-1].y;
+   }
+
+   if(
+    p2[0].x<0||
+    p2[0].x>=840||
+    p2[0].y<0||
+    p2[0].y>=500
+   ){
+    p2=[{x:550,y:250}];
+    p2dx=-20;
+    p2dy=0;
+    damage(20);
+   }
+  }
+
+  ctx.fillStyle="#ff4081";
+  ctx.fillRect(food.x,food.y,18,18);
+
+  snake.forEach((s,i)=>{
+   ctx.fillStyle=i===0?"#00e5ff":"#008fa3";
+   ctx.fillRect(s.x,s.y,18,18);
+  });
+
+  if(two){
+   p2.forEach((s,i)=>{
+    ctx.fillStyle=i===0?"#ff4081":"#a50038";
+    ctx.fillRect(s.x,s.y,18,18);
+   });
+  }
+
+  animationID=requestAnimationFrame(loop);
+ }
+
+ animationID=requestAnimationFrame(loop);
+}
+
+/* ==========================================================
+ SHOOTER
+========================================================== */
+
+function shooterGame(){
+
+ const two=document.getElementById("mode").value==="two";
+
+ document.getElementById("instructions").textContent=
+ two
+ ?"Player 1: A/D + SPACE | Player 2: Arrow Keys + ENTER"
+ :"Move with A/D or Arrow Keys. SPACE shoots.";
+
+ let p1={x:380,y:440};
+ let p2={x:500,y:440};
+
+ let bullets=[];
+ let enemies=[];
+
+ document.onkeydown=e=>{
+
+  keys[e.key]=true;
+
+  if(e.code==="Space")
+   bullets.push({x:p1.x+20,y:p1.y});
+
+  if(two&&e.key==="Enter")
+   bullets.push({x:p2.x+20,y:p2.y});
+ };
+
+ document.onkeyup=e=>keys[e.key]=false;
+
+ let lastEnemy=0;
+
+ function loop(time){
+
+  if(!gameRunning)return;
+
+  ctx.fillStyle="#02040c";
+  ctx.fillRect(0,0,850,500);
+
+  const sp=6*getSpeed();
+
+  if(keys.a)p1.x-=sp;
+  if(keys.d)p1.x+=sp;
+
+  if(keys.ArrowLeft)p2.x-=sp;
+  if(keys.ArrowRight)p2.x+=sp;
+
+  p1.x=Math.max(0,Math.min(810,p1.x));
+  p2.x=Math.max(0,Math.min(810,p2.x));
+
+  if(time-lastEnemy>700/getSpeed()){
+
+   enemies.push({
+    x:Math.random()*810,
+    y:-30,
+    v:2+Math.random()*2
+   });
+
+   lastEnemy=time;
+  }
+
+  ctx.fillStyle="#00e5ff";
+  ctx.fillRect(p1.x,p1.y,40,25);
+
+  if(two){
+   ctx.fillStyle="#7c4dff";
+   ctx.fillRect(p2.x,p2.y,40,25);
+  }
+
+  ctx.fillStyle="#fff";
+
+  bullets.forEach((b,i)=>{
+
+   b.y-=9*getSpeed();
+
+   ctx.fillRect(b.x,b.y,5,15);
+
+   if(b.y<0)
+    bullets.splice(i,1);
+  });
+
+  enemies.forEach((en,i)=>{
+
+   en.y+=en.v*getSpeed();
+
+   ctx.fillStyle="#ff1744";
+   ctx.fillRect(en.x,en.y,32,32);
+
+   if(en.y>500){
+    enemies.splice(i,1);
+    damage(10);
+   }
+
+   bullets.forEach((b,j)=>{
+
+    if(
+     b.x<en.x+32&&
+     b.x+5>en.x&&
+     b.y<en.y+32&&
+     b.y+15>en.y
+    ){
+
+     enemies.splice(i,1);
+     bullets.splice(j,1);
+
+     score+=10;
+     setScore();
+     beep(800,.05);
+    }
+   });
+  });
+
+  animationID=requestAnimationFrame(loop);
+ }
+
+ animationID=requestAnimationFrame(loop);
+}
+
+/* ==========================================================
+ DODGE
+========================================================== */
+
+function dodgeGame(){
+
+ document.getElementById("instructions").textContent=
+ "Move with A/D or Arrow Keys. Avoid the falling blocks.";
+
+ let player={x:400,y:440,w:40,h:40};
+ let blocks=[];
+ let last=0;
+
+ document.onkeydown=e=>keys[e.key]=true;
+ document.onkeyup=e=>keys[e.key]=false;
+
+ function loop(time){
+
+  if(!gameRunning)return;
+
+  ctx.fillStyle="#02040c";
+  ctx.fillRect(0,0,850,500);
+
+  const sp=6*getSpeed();
+
+  if(keys.a||keys.ArrowLeft)player.x-=sp;
+  if(keys.d||keys.ArrowRight)player.x+=sp;
+
+  player.x=Math.max(0,Math.min(810,player.x));
+
+  if(time-last>500/getSpeed()){
+
+   blocks.push({
+    x:Math.random()*810,
+    y:-30,
+    s:25+Math.random()*25,
+    v:2+Math.random()*3
+   });
+
+   last=time;
+  }
+
+  ctx.fillStyle="#00e5ff";
+  ctx.fillRect(player.x,player.y,player.w,player.h);
+
+  blocks.forEach((b,i)=>{
+
+   b.y+=b.v*getSpeed();
+
+   ctx.fillStyle="#ff4081";
+   ctx.fillRect(b.x,b.y,b.s,b.s);
+
+   if(
+    player.x<b.x+b.s&&
+    player.x+player.w>b.x&&
+    player.y<b.y+b.s&&
+    player.y+player.h>b.y
+   ){
+
+    blocks.splice(i,1);
+    damage(20);
+   }
+
+   if(b.y>500){
+    blocks.splice(i,1);
+    score++;
+    setScore();
+   }
+  });
+
+  animationID=requestAnimationFrame(loop);
+ }
+
+ animationID=requestAnimationFrame(loop);
+}
+
+/* ==========================================================
+ CATCH
+========================================================== */
+
+function catchGame(){
+
+ document.getElementById("instructions").textContent=
+ "Move with A/D or Arrow Keys. Catch the falling objects.";
+
+ let basket={
+  x:375,
+  y:450,
+  w:100,
+  h:20
+ };
+
+ let objects=[];
+ let last=0;
+
+ document.onkeydown=e=>keys[e.key]=true;
+ document.onkeyup=e=>keys[e.key]=false;
+
+ function loop(time){
+
+  if(!gameRunning)return;
+
+  ctx.fillStyle="#02040c";
+  ctx.fillRect(0,0,850,500);
+
+  const sp=7*getSpeed();
+
+  if(keys.a||keys.ArrowLeft)basket.x-=sp;
+  if(keys.d||keys.ArrowRight)basket.x+=sp;
+
+  basket.x=Math.max(0,Math.min(750,basket.x));
+
+  if(time-last>600/getSpeed()){
+
+   objects.push({
+    x:20+Math.random()*810,
+    y:-20,
+    v:2+Math.random()*3,
+    good:Math.random()>.2
+   });
+
+   last=time;
+  }
+
+  ctx.fillStyle="#00e676";
+  ctx.fillRect(basket.x,basket.y,basket.w,basket.h);
+
+  objects.forEach((o,i)=>{
+
+   o.y+=o.v*getSpeed();
+
+   ctx.fillStyle=o.good?"#ffd740":"#ff1744";
+
+   ctx.beginPath();
+   ctx.arc(o.x,o.y,12,0,Math.PI*2);
+   ctx.fill();
+
+   if(
+    o.y>basket.y&&
+    o.x>basket.x&&
+    o.x<basket.x+basket.w
+   ){
+
+    if(o.good){
+     score+=10;
+     beep(700,.05);
+    }else{
+     damage(20);
+    }
+
+    objects.splice(i,1);
+    setScore();
+   }
+
+   if(o.y>500)
+    objects.splice(i,1);
+  });
+
+  animationID=requestAnimationFrame(loop);
+ }
+
+ animationID=requestAnimationFrame(loop);
+}
+
+/* ==========================================================
+ TARGET
+========================================================== */
+
+function targetGame(){
+
+ document.getElementById("instructions").textContent=
+ "Click the target. Missing too many times costs health.";
+
+ let target={
+  x:425,
+  y:250,
+  r:35
+ };
+
+ let timer=0;
+
+ canvas.onclick=e=>{
+
+  if(!gameRunning)return;
+
+  const r=canvas.getBoundingClientRect();
+
+  const x=(e.clientX-r.left)*850/r.width;
+  const y=(e.clientY-r.top)*500/r.height;
+
+  if(Math.hypot(x-target.x,y-target.y)<target.r){
+
+   score+=10;
+   setScore();
+
+   target.x=50+Math.random()*750;
+   target.y=50+Math.random()*400;
+
+   timer=0;
+
+   beep(900,.06);
+
+  }else{
+
+   damage(5);
+  }
+ };
+
+ function loop(){
+
+  if(!gameRunning)return;
+
+  ctx.fillStyle="#02040c";
+  ctx.fillRect(0,0,850,500);
+
+  timer+=1;
+
+  ctx.fillStyle="#ff4081";
+
+  ctx.beginPath();
+  ctx.arc(target.x,target.y,target.r,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.strokeStyle="#fff";
+  ctx.lineWidth=3;
+
+  ctx.beginPath();
+  ctx.arc(target.x,target.y,target.r+10,0,Math.PI*2);
+  ctx.stroke();
+
+  if(timer>180/getSpeed()){
+   damage(10);
+   timer=0;
+   target.x=50+Math.random()*750;
+   target.y=50+Math.random()*400;
+  }
+
+  animationID=requestAnimationFrame(loop);
+ }
+
+ animationID=requestAnimationFrame(loop);
+}
+
+/* ==========================================================
+ RUNNER
+========================================================== */
+
+function runnerGame(){
+
+ document.getElementById("instructions").textContent=
+ "SPACE / UP = jump. Avoid obstacles.";
+
+ let player={
+  x:100,
+  y:410,
+  w:40,
+  h:40,
+  vy:0
+ };
+
+ let jumping=false;
+ let obstacles=[];
+ let last=0;
+
+ function jump(){
+
+  if(!jumping){
+   player.vy=-13;
+   jumping=true;
+  }
+ }
+
+ document.onkeydown=e=>{
+  if(e.code==="Space"||e.key==="ArrowUp")
+   jump();
+ };
+
+ canvas.onclick=jump;
+
+ function loop(time){
+
+  if(!gameRunning)return;
+
+  ctx.fillStyle="#02040c";
+  ctx.fillRect(0,0,850,500);
+
+  player.vy+=.6;
+  player.y+=player.vy;
+
+  if(player.y>=410){
+   player.y=410;
+   player.vy=0;
+   jumping=false;
+  }
+
+  if(time-last>900/getSpeed()){
+
+   obstacles.push({
+    x:850,
+    y:420,
+    w:30,
+    h:30
+   });
+
+   last=time;
+  }
+
+  ctx.fillStyle="#00e5ff";
+  ctx.fillRect(player.x,player.y,player.w,player.h);
+
+  obstacles.forEach((o,i)=>{
+
+   o.x-=6*getSpeed();
+
+   ctx.fillStyle="#ff1744";
+   ctx.fillRect(o.x,o.y,o.w,o.h);
+
+   if(
+    player.x<o.x+o.w&&
+    player.x+player.w>o.x&&
+    player.y<o.y+o.h&&
+    player.y+player.h>o.y
+   ){
+
+    obstacles.splice(i,1);
+    damage(20);
+   }
+
+   if(o.x<0){
+    obstacles.splice(i,1);
+    score++;
+    setScore();
+   }
+  });
+
+  ctx.fillStyle="#ffffff55";
+  ctx.fillRect(0,455,850,4);
+
+  animationID=requestAnimationFrame(loop);
+ }
+
+ animationID=requestAnimationFrame(loop);
+}
+
+/* ==========================================================
+ FLAPPY
+========================================================== */
+
+function flappyGame(){
+
+ document.getElementById("instructions").textContent=
+ "SPACE or click to fly through the gaps.";
+
+ let p={
+  x:130,
+  y:250,
+  vy:0
+ };
+
+ let pipes=[];
+ let last=0;
+
+ function flap(){
+  p.vy=-7;
+ }
+
+ document.onkeydown=e=>{
+  if(e.code==="Space")flap();
+ };
+
+ canvas.onclick=flap;
+
+ function loop(time){
+
+  if(!gameRunning)return;
+
+  ctx.fillStyle="#07132d";
+  ctx.fillRect(0,0,850,500);
+
+  p.vy+=.35*getSpeed();
+  p.y+=p.vy;
+
+  if(time-last>1300/getSpeed()){
+
+   const top=50+Math.random()*200;
+
+   pipes.push({
+    x:850,
+    top,
+    bottom:top+160
+   });
+
+   last=time;
+  }
+
+  ctx.fillStyle="#00e5ff";
+
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,18,0,Math.PI*2);
+  ctx.fill();
+
+  pipes.forEach((pipe,i)=>{
+
+   pipe.x-=5*getSpeed();
+
+   ctx.fillStyle="#00e676";
+
+   ctx.fillRect(pipe.x,0,60,pipe.top);
+   ctx.fillRect(pipe.x,pipe.bottom,60,500-pipe.bottom);
+
+   if(
+    p.x+18>pipe.x&&
+    p.x-18<pipe.x+60&&
+    (p.y-18<pipe.top||
+     p.y+18>pipe.bottom)
+   ){
+
+    damage(100);
+   }
+
+   if(pipe.x+60<p.x){
+    pipes.splice(i,1);
+    score++;
+    setScore();
+   }
+  });
+
+  if(p.y<0||p.y>500)
+   damage(100);
+
+  animationID=requestAnimationFrame(loop);
+ }
+
+ animationID=requestAnimationFrame(loop);
+}
+
+/* ==========================================================
+ BREAKOUT
+========================================================== */
+
+function breakoutGame(){
+
+ document.getElementById("instructions").textContent=
+ "Use Arrow Keys or mouse to control the paddle.";
+
+ let paddle={
+  x:375,
+  y:465,
+  w:100,
+  h:15
+ };
+
+ let ball={
+  x:425,
+  y:350,
+  vx:4,
+  vy:-4
+ };
+
+ let bricks=[];
+
+ for(let r=0;r<5;r++){
+  for(let c=0;c<10;c++){
+   bricks.push({
+    x:c*82+10,
+    y:r*30+30,
+    w:72,
+    h:20,
+    alive:true
+   });
+  }
+ }
+
+ document.onkeydown=e=>keys[e.key]=true;
+ document.onkeyup=e=>keys[e.key]=false;
+
+ canvas.onmousemove=e=>{
+  const r=canvas.getBoundingClientRect();
+
+  paddle.x=
+   (e.clientX-r.left)*850/r.width-50;
+ };
+
+ function loop(){
+
+  if(!gameRunning)return;
+
+  ctx.fillStyle="#02040c";
+  ctx.fillRect(0,0,850,500);
+
+  if(keys.ArrowLeft)paddle.x-=7;
+  if(keys.ArrowRight)paddle.x+=7;
+
+  paddle.x=Math.max(0,Math.min(750,paddle.x));
+
+  ball.x+=ball.vx*getSpeed();
+  ball.y+=ball.vy*getSpeed();
+
+  if(ball.x<0||ball.x>850)
+   ball.vx*=-1;
+
+  if(ball.y<0)
+   ball.vy*=-1;
+
+  if(
+   ball.y>paddle.y-10&&
+   ball.x>paddle.x&&
+   ball.x<paddle.x+paddle.w
+  ){
+   ball.vy=-Math.abs(ball.vy);
+   beep(400,.03);
+  }
+
+  if(ball.y>500){
+   damage(20);
+   ball.x=425;
+   ball.y=350;
+  }
+
+  bricks.forEach(b=>{
+
+   if(!b.alive)return;
+
+   if(
+    ball.x>b.x&&
+    ball.x<b.x+b.w&&
+    ball.y>b.y&&
+    ball.y<b.y+b.h
+   ){
+
+    b.alive=false;
+    ball.vy*=-1;
+    score+=10;
+    setScore();
+   }
+
+   if(b.alive){
+    ctx.fillStyle="#7c4dff";
+    ctx.fillRect(b.x,b.y,b.w,b.h);
+   }
+  });
+
+  ctx.fillStyle="#00e5ff";
+  ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
+
+  ctx.fillStyle="#ff4081";
+  ctx.beginPath();
+  ctx.arc(ball.x,ball.y,9,0,Math.PI*2);
+  ctx.fill();
+
+  if(bricks.every(b=>!b.alive)){
+   gameRunning=false;
+
+   ctx.fillStyle="#fff";
+   ctx.font="45px Arial";
+   ctx.textAlign="center";
+   ctx.fillText("YOU WIN!",425,250);
+  }
+
+  animationID=requestAnimationFrame(loop);
+ }
+
+ animationID=requestAnimationFrame(loop);
+}
+
+/* ==========================================================
+ PONG — 2 PLAYERS 1 KEYBOARD
+========================================================== */
+
+function pongGame(){
+
+ document.getElementById("instructions").textContent=
+ "Player 1: W/S • Player 2: Arrow Up/Down";
+
+ let p1=200;
+ let p2=200;
+
+ let ball={
+  x:425,
+  y:250,
+  vx:5,
+  vy:4
+ };
+
+ document.onkeydown=e=>keys[e.key]=true;
+ document.onkeyup=e=>keys[e.key]=false;
+
+ function loop(){
+
+  if(!gameRunning)return;
+
+  ctx.fillStyle="#02040c";
+  ctx.fillRect(0,0,850,500);
+
+  if(keys.w)p1-=7;
+  if(keys.s)p1+=7;
+
+  if(keys.ArrowUp)p2-=7;
+  if(keys.ArrowDown)p2+=7;
+
+  p1=Math.max(0,Math.min(400,p1));
+  p2=Math.max(0,Math.min(400,p2));
+
+  ball.x+=ball.vx*getSpeed();
+  ball.y+=ball.vy*getSpeed();
+
+  if(ball.y<0||ball.y>500)
+   ball.vy*=-1;
+
+  if(
+   ball.x<35&&
+   ball.y>p1&&
+   ball.y<p1+100
+  ){
+   ball.vx=Math.abs(ball.vx);
+   score++;
+   setScore();
+   beep(600,.04);
+  }
+
+  if(
+   ball.x>815&&
+   ball.y>p2&&
+   ball.y<p2+100
+  ){
+   ball.vx=-Math.abs(ball.vx);
+   score++;
+   setScore();
+   beep(600,.04);
+  }
+
+  if(ball.x<0){
+   damage(25);
+   ball={x:425,y:250,vx:5,vy:4};
+  }
+
+  if(ball.x>850){
+   damage(25);
+   ball={x:425,y:250,vx:-5,vy:4};
+  }
+
+  ctx.fillStyle="#00e5ff";
+  ctx.fillRect(15,p1,20,100);
+
+  ctx.fillStyle="#ff4081";
+  ctx.fillRect(815,p2,20,100);
+
+  ctx.fillStyle="#fff";
+  ctx.beginPath();
+  ctx.arc(ball.x,ball.y,10,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle="#ffffff33";
+
+  for(let y=0;y<500;y+=35)
+   ctx.fillRect(422,y,6,18);
+
+  animationID=requestAnimationFrame(loop);
+ }
+
+ animationID=requestAnimationFrame(loop);
+}
+
+/* ==========================================================
+ SAVE / DOWNLOAD
+========================================================== */
+
+function saveGame(){
+
+ const data={
+  username:localStorage.getItem("dm_username")||"Player 1.1",
+  difficulty:difficulty.value,
+  mode:document.getElementById("mode").value,
+  score:score
+ };
+
+ localStorage.setItem("dm_saved_game",JSON.stringify(data));
+
+ alert("Game settings saved on this device.");
+}
+
+function downloadThisPage(){
+
+ const html="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
+
+ const blob=new Blob([html],{
+  type:"text/html"
+ });
+
+ const url=URL.createObjectURL(blob);
+
+ const a=document.createElement("a");
+
+ a.href=url;
+ a.download="DM-HTML5-Games.html";
+
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+
+ setTimeout(()=>{
+  URL.revokeObjectURL(url);
+ },1000);
+}
+
+/* keyboard reset */
+window.addEventListener("blur",()=>{
+ keys={};
+});
+</script>
+
+</body>
+</html>
